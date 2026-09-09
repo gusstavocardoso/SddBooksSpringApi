@@ -48,4 +48,4 @@ mvn gatling:test
 Os relatórios detalhados do Gatling serão gerados na pasta `target/gatling/`.
 
 ## CI (Continuous Integration)
-O projeto conta com um workflow do GitHub Actions (`.github/workflows/ci.yml`) que é executado a cada push na branch `main`. A esteira configura o Java 21, faz o build pelo Maven e executa todos os testes unitários e de integração automaticamente.
+O projeto conta com um workflow do GitHub Actions (`.github/workflows/ci.yml`) que é executado a cada push na branch `main`. A esteira configura o Java 17, faz o build pelo Maven e executa todos os testes unitários e de integração automaticamente.
