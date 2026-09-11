@@ -65,4 +65,62 @@ class BookServiceTest {
         assertNotNull(response);
         assertEquals(book.getId(), response.id());
     }
+
+    @Test
+    void getBookById_NotFound_ThrowsException() {
+        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> bookService.getBookById(1L));
+    }
+
+    @Test
+    void getAllBooks_Success() {
+        when(bookRepository.findAll()).thenReturn(java.util.List.of(book));
+        
+        var response = bookService.getAllBooks();
+        
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(book.getTitulo(), response.get(0).titulo());
+    }
+
+    @Test
+    void updateBook_Success() {
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
+
+        BookResponse response = bookService.updateBook(1L, bookRequest);
+
+        assertNotNull(response);
+        assertEquals(book.getTitulo(), response.titulo());
+    }
+
+    @Test
+    void updateBook_NotFound_ThrowsException() {
+        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> bookService.updateBook(1L, bookRequest));
+    }
+
+    @Test
+    void updateBook_IsbnAlreadyExists_ThrowsException() {
+        Book existingBook = new Book(1L, "O Senhor dos Anéis", "J.R.R. Tolkien", "99999999", LocalDate.of(1954, 7, 29));
+        
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(existingBook));
+        when(bookRepository.existsByIsbn(bookRequest.isbn())).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () -> bookService.updateBook(1L, bookRequest));
+    }
+
+    @Test
+    void deleteBook_Success() {
+        when(bookRepository.existsById(1L)).thenReturn(true);
+        bookService.deleteBook(1L);
+        verify(bookRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void deleteBook_NotFound_ThrowsException() {
+        when(bookRepository.existsById(1L)).thenReturn(false);
+        assertThrows(IllegalArgumentException.class, () -> bookService.deleteBook(1L));
+        verify(bookRepository, never()).deleteById(anyLong());
+    }
 }

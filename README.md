@@ -35,8 +35,11 @@ mvn spring-boot:run
 ### Testes Unitários e de Integração
 Os testes de integração utilizam o Testcontainers para provisionar um PostgreSQL em Docker automaticamente. Certifique-se de que o Docker esteja rodando.
 ```bash
-mvn clean test
+mvn clean verify
 ```
+
+Após a execução dos testes, o relatório de **Cobertura de Código** (JaCoCo) estará disponível em:
+`target/site/jacoco/index.html`
 
 ### Testes de Performance (Gatling)
 Para executar os testes de carga simulando múltiplos acessos:

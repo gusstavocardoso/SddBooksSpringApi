@@ -35,5 +35,5 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Run tests with Maven
-      run: mvn -B test --file pom.xml
+    - name: Run unit and integration tests with Maven
+      run: mvn -B verify --file pom.xml
